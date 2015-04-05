@@ -528,10 +528,14 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			var openListId = 0;
 			if(res && res.total)
 			{
+				var firstElem;
+
 				// open required or first non-hidden list
-				for(var i=0; i<res.list.length; i++) {
+				for(var i in res.list) {
+					if (i == 0)
+						firstElem = res.list[i].id;
 					if(_mtt.options.openList) {
-						if(_mtt.options.openList == res.list[i].id || _mtt.options.openList == res.list[i].name) {
+						if(_mtt.options.openList == res.list[i].id) {
 							openListId = res.list[i].id;
 							break;
 						}
@@ -546,7 +550,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 				if(_mtt.options.openList == -1) openListId = -1;
 
 				// or open first if all list are hidden
-				if(!openListId) openListId = res.list[0].id;
+				if(!openListId) openListId = firstElem;//res.list[0].id;
 
 				$.each(res.list, function(i,item){
 					tabLists.add(item);
@@ -693,7 +697,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		{
 			s = a[i];
 			switch(s) {
-                case "listname": p.list = a[++i].replace(/[-_]/g, ' '); break;
+				case "listname": p.list = a[++i].replace(/[-_]/g, ' '); break;
 				case "list": if(a[++i].match(/^-?\d+$/)) { p[s] = a[i]; } break;
 				case "alltasks": p.list = '-1'; break;
 			}
@@ -706,10 +710,9 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 };
 
-function addList(defVal)
+function addList()
 {
-    var defVal = defVal || _mtt.lang.get('addListDefault');
-	var r = prompt(_mtt.lang.get('addList'), defVal);
+	var r = prompt(_mtt.lang.get('addList'), _mtt.lang.get('addListDefault'));
 	if(r == null) return;
 
 	_mtt.db.request('addList', {name:r}, function(json){
@@ -846,7 +849,7 @@ function prepareHtml(s)
 function preparePrio(prio,id)
 {
 	var cl =''; var v = '';
-	if(prio < 0) { cl = 'prio-neg prio-neg-'+Math.abs(prio); v = '&#8722;'+Math.abs(prio); }	// &#8722; = &minus; = ?
+	if(prio < 0) { cl = 'prio-neg prio-neg-'+Math.abs(prio); v = '&#8722;'+Math.abs(prio); }	// &#8722; = &minus; = −
 	else if(prio > 0) { cl = 'prio-pos prio-pos-'+prio; v = '+'+prio; }
 	else { cl = 'prio-zero'; v = '&#177;0'; }													// &#177; = &plusmn; = ±
 	return '<span class="task-prio '+cl+'">'+v+'</span>';
@@ -878,7 +881,7 @@ function prepareTagsClass(ids)
 function prepareDuedate(item)
 {
 	if(!item.duedate) return '';
-	return '<span class="duedate" title="'+item.dueTitle+'"><span class="duedate-arrow">?</span> '+item.dueStr+'</span>';
+	return '<span class="duedate" title="'+item.dueTitle+'"><span class="duedate-arrow">→</span> '+item.dueStr+'</span>';
 };
 
 
@@ -1026,10 +1029,10 @@ function setSort(v, init)
 {
 	$('#listmenucontainer .sort-item').removeClass('mtt-item-checked').children('.mtt-sort-direction').text('');
 	if(v == 0) $('#sortByHand').addClass('mtt-item-checked');
-	else if(v==1 || v==101) $('#sortByPrio').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==1 ? '?' : '?');
-	else if(v==2 || v==102) $('#sortByDueDate').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==2 ? '?' : '?');
-	else if(v==3 || v==103) $('#sortByDateCreated').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==3 ? '?' : '?');
-	else if(v==4 || v==104) $('#sortByDateModified').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==4 ? '?' : '?');
+	else if(v==1 || v==101) $('#sortByPrio').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==1 ? '↑' : '↓');
+	else if(v==2 || v==102) $('#sortByDueDate').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==2 ? '↑' : '↓');
+	else if(v==3 || v==103) $('#sortByDateCreated').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==3 ? '↓' : '↑');
+	else if(v==4 || v==104) $('#sortByDateModified').addClass('mtt-item-checked').children('.mtt-sort-direction').text(v==4 ? '↓' : '↑');
 	else return;
 
 	curList.sort = v;
@@ -2140,7 +2143,24 @@ function showSettings()
 	$('#page_ajax').load(_mtt.mttUrl+'settings.php?ajax=yes',null,function(){
 		//showhide($('#page_ajax').addClass('mtt-page-settings'), $('#page_tasks'));
 		_mtt.pageSet('ajax','settings');
+		$("#resetSignature").click(function(e) {e.preventDefault();resetSignature()});
 	})
+	return false;
+}
+
+function resetSignature()
+{
+	// TODO: translate
+	if (!confirm (_mtt.lang.get('reallyResetSignature')))
+		return false;
+	if(_mtt.pages.current.pageClass != 'settings')
+		return false;
+	var params = { resetSignature:'resetSignature' };
+	$.post(_mtt.mttUrl + 'settings.php', params, function(json)
+	{
+		if(json.saved)
+			$('#signature').html (json.signature);
+	}, 'json');
 	return false;
 }
 

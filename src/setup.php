@@ -8,6 +8,15 @@
 
 set_exception_handler('myExceptionHandler');
 
+# check if config file exists
+if (!file_exists('./db/config.php'))
+{
+	if (!touch ('./db/config.php'))
+		exitMessage ("Config file ('db/config.php') does not exist and cannot create it");
+}
+
+require_once('./init.php');
+
 # Check old config file (prior v1.3)
 require_once('./db/config.php');
 if(!isset($config['db']))
@@ -84,6 +93,7 @@ if(!$ver)
 		if(!is_writable('./db/config.php')) {
 			exitMessage("Config file ('db/config.php') is not writable.");
 		}
+		Config::set('signature', md5(uniqid(rand(), true)));
 		Config::save();
 		exitMessage("This will create myTinyTodo database <form method=post><input type=hidden name=install value=1><input type=submit value=' Install '></form>");
 	}

@@ -25,10 +25,19 @@ class DefaultLang
 		'deleteList' => "This will delete current list with all tasks in it.\\nAre you sure?",
 		'clearCompleted' => "This will delete all completed tasks in the list.\\nAre you sure?",
 		'settingsSaved' => "Settings saved. Reloading...",
+		'reallyResetSignature' => "Do you really want to reset the signature?\\This will disconnect all applications.",
 	);
 
 	private $default_inc = array
 	(
+		'username' => "User",
+		'set_newpass_descr' => "(leave blank if won't change current password)",
+		'set_user' => "Username",
+		'signature' => "Signature",
+		'reset signature' => "reset signature",
+		'stay_loggedin' => "Remember me",
+		'set_default_list' => "Default Todo List",
+		'set_default_list_descr' => "(e.g. used for API imports)",
 		'My Tiny Todolist' => "My Tiny Todolist",
 		'htab_newtask' => "New task",
 		'htab_search' => "Search",

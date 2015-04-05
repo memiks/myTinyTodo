@@ -22,8 +22,19 @@ if(isset($_POST['save']))
 	$langs = getLangs();
 	Config::$params['lang']['options'] = array_keys($langs);
 	Config::set('lang', _post('lang'));
-	if(isset($_POST['password']) && $_POST['password'] != '') Config::set('password', $_POST['password']);
-	elseif(!_post('allowpassword')) Config::set('password', '');
+	if ($_POST['allowpassword'])
+	{
+		if (isset($_POST['password']) && isset($_POST['username']) && !empty($_POST['password']) && !empty($_POST['username']))
+		{
+			Config::set('password', $_POST['password']);
+			Config::set('username', $_POST['username']);
+		}
+	}
+	else
+	{
+		Config::set('password', '');
+		Config::set('username', '');
+	}
 	Config::set('smartsyntax', (int)_post('smartsyntax'));
 	// Do not set invalid timezone
 	try {
@@ -34,7 +45,6 @@ if(isset($_POST['save']))
 	catch (Exception $e) {
 	}
 	Config::set('autotag', (int)_post('autotag'));
-	Config::set('session', _post('session'));
 	Config::set('firstdayofweek', (int)_post('firstdayofweek'));
 	Config::set('clock', (int)_post('clock'));
 	Config::set('dateformat', _post('dateformat'));
@@ -43,6 +53,17 @@ if(isset($_POST['save']))
 	Config::set('title', trim(_post('title')));
 	Config::set('showdate', (int)_post('showdate'));
 	Config::save();
+	$t['saved'] = 1;
+	jsonExit($t);
+}
+
+if(isset($_POST['resetSignature']))
+{
+	$t = array();
+	$sig = md5(uniqid(rand(), true));
+	Config::set('signature', $sig);
+	Config::save();
+	$t['signature'] = $sig;
 	$t['saved'] = 1;
 	jsonExit($t);
 }
@@ -128,7 +149,10 @@ function timezoneIdentifiers()
     return $a;
 }
 
+
+
 header('Content-type:text/html; charset=utf-8');
+
 ?>
 
 <div><a href="#" class="mtt-back-button"><?php _e('go_back');?></a></div>
@@ -154,13 +178,22 @@ header('Content-type:text/html; charset=utf-8');
 <tr>
 <th><?php _e('set_protection');?>:</th>
 <td>
- <label><input type="radio" name="allowpassword" value="1" <?php if(_c('password')!='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled",false)' /><?php _e('set_enabled');?></label> <br/>
- <label><input type="radio" name="allowpassword" value="0" <?php if(_c('password')=='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled","disabled")' /><?php _e('set_disabled');?></label> <br/>
-</td></tr>
+<label><input type="radio" name="allowpassword" value="1" <?php if(_c('password')!='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled",false) && $(this.form).find("input[name=username]").attr("disabled",false)' /><?php _e('set_enabled');?></label> <br/>
+<label><input type="radio" name="allowpassword" value="0" <?php if(_c('password')=='') echo 'checked="checked"'; ?> onclick='$(this.form).find("input[name=password]").attr("disabled","disabled") && $(this.form).find("input[name=username]").attr("disabled","disabled")' /><?php _e('set_disabled');?></label> <br/>
+ </td></tr>
+ 
+ <tr>
+ <th><?php _e('set_user');?>:</th>
+ <td> <input type="text" name="username" value="<?php echo _c('username');?>" <?php if(_c('password')=='') echo "disabled"; ?> />
+ </td>
+ </tr>
 
 <tr>
 <th><?php _e('set_newpass');?>:<br/><span class="descr"><?php _e('set_newpass_descr');?></span></th>
-<td> <input type="password" name="password" <?php if(_c('password')=='') echo "disabled"; ?> /> </td>
+<td> <input type="password" name="password" <?php if(_c('password')=='') echo "disabled"; ?> /><br />
+<span><?php _e('signature');?>:</span> <span id="signature"><?php echo _c('signature');?></span>
+<span id="resetSignature" title="<?php _e('reset signature');?>"></span>
+</td>
 </tr>
 
 <tr>
@@ -178,12 +211,7 @@ header('Content-type:text/html; charset=utf-8');
  <label><input type="radio" name="autotag" value="0" <?php if(!_c('autotag')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
 </td></tr>
 
-<tr>
-<th><?php _e('set_sessions');?>:</th>
-<td>
- <label><input type="radio" name="session" value="default" <?php if(_c('session')=='default') echo 'checked="checked"'; ?> /><?php _e('set_sessions_php');?></label> <br/>
- <label><input type="radio" name="session" value="files" <?php if(_c('session')=='files') echo 'checked="checked"'; ?> /><?php _e('set_sessions_files');?></label> <span class="descr">(&lt;mytinytodo_dir&gt;/tmp/sessions)</span>
-</td></tr>
+
 
 <tr>
 <th><?php _e('set_timezone');?>:</th>
