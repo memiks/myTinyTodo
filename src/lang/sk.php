@@ -4,10 +4,10 @@
 	myTinyTodo language pack
 	Language: Slovak
 	Original name: Slovenčina
-	Author: Ľubomír Molent
-	Author Url: 
-	AppVersion: v1.3.6
-	Date: 2010-12-16
+	Author: Ľubomír Molent, Zdenko Podobný
+	Author Url:
+	AppVersion: v1.5.0
+	Date: 2015-04-10
 */
 
 class Lang extends DefaultLang
@@ -25,17 +25,17 @@ class Lang extends DefaultLang
 		'renameList' => "Premenovat zoznam",
 		'deleteList' => "Týmto vymažete zoznam a všetky úlohy v ňom.\\nChcete pokračovat?",
 		'clearCompleted' => "Týmto vymažete všetky splnené úlohy.\\nChcete pokračovat?",
-		'settingsSaved' => "Nastavenie uložené. Načítavam...",
+		'settingsSaved' => "Nastavenia uložené. Načítavam...",
 	);
 
 	var $inc = array
 	(
-		'username' => "užívateľ",
-		'set_user' => "Užívateľské meno",
+		'username' => "Používateľ",
+		'set_user' => "Používateľ",
 		'signature' => "podpis",
-		'set_default_list' => "Predvolené Todo List",
+		'set_default_list' => "Predvolený zoznam úloh",
 		'set_default_list_descr' => "(Napr. použiť pre volanie API)",
-		'My Tiny Todolist' => "My Tiny Todolist",
+		'My Tiny Todolist' => "Môj malý zoznam úloh",
 		'htab_newtask' => "Nová úloha",
 		'htab_search' => "Hľadať",
 		'btn_add' => "Pridať",
@@ -63,17 +63,19 @@ class Lang extends DefaultLang
 		'sortByHand' => "Triediť ručne",
 		'sortByPriority' => "Triediť podľa priority",
 		'sortByDueDate' => "Triediť podľa termínu",
+		'sortByDateCreated' => "Triediť podľa dátumu vytvorenia",
+		'sortByDateModified' => "Triediť podľa dátumu úpravy",
 		'due' => "Termín",
 		'daysago' => "pred %d dňami",
 		'indays' => "o %d dní",
-		'months_short' => array("Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"),
+		'months_short' => array("Jan","Feb","Mar","Apr","Máj","Jún","Júl","Aug","Sep","Okt","Nov","Dec"),
 		'months_long' => array("Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"),
 		'days_min' => array("Ne", "Po", "Ut", "St", "Št", "Pi", "So"),
-		'days_long' => array("Nedľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"),
+		'days_long' => array("Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"),
 		'today' => "dnes",
 		'yesterday' => "včera",
 		'tomorrow' => "zajtra",
-		'f_past' => "Overdue",
+		'f_past' => "Zameškané",
 		'f_today' => "Dnes a zajtra",
 		'f_soon' => "Čoskoro",
 		'action_edit' => "Upraviť",
@@ -93,17 +95,17 @@ class Lang extends DefaultLang
 		'alltags' => "Všetky tagy:",
 		'alltags_show' => "Zobraziť všetko",
 		'alltags_hide' => "Skryť všetko",
-		'a_settings' => "Nastavenie",
+		'a_settings' => "Nastavenia",
 		'rss_feed' => "RSS kanál",
 		'feed_title' => "%s",
 		'feed_description' => "Nové úlohy v %s",
 
 		/* Settings */
-		'set_header' => "Nastavenie",
+		'set_header' => "Nastavenia",
 		'set_title' => "Titulok",
-		'set_title_descr' => "(zadajte, pokiaľ chcete zmeniť východzí titulok)",
+		'set_title_descr' => "(zadajte, pokiaľ chcete zmeniť štandardný titulok)",
 		'set_language' => "Jazyk",
-		'set_protection' => "Zaheslovanie",
+		'set_protection' => "Ochrana heslom",
 		'set_enabled' => "Zapnuté",
 		'set_disabled' => "Vypnuté",
 		'set_newpass' => "Nové heslo",
@@ -112,6 +114,7 @@ class Lang extends DefaultLang
 		'set_smartsyntax_descr' => "(Zápis: \"/priorita/ test úlohy /tagy/\")",
 		'set_autotz' => "Automatická časová zóna",
 		'set_autotz_descr' => "(zistí časovú zónu pomocou JavaScriptu)",
+		'set_timezone' => "Časová zóna",
 		'set_autotag' => "Automatické tagovanie",
 		'set_autotag_descr' => "(automaticky priradí k tagom text z filtra)",
 		'set_sessions' => "Správa sessions",
@@ -120,13 +123,14 @@ class Lang extends DefaultLang
 		'set_firstdayofweek' => "Prvný deň v týždni",
 		'set_duedate' => "Formát termínu splnenej úlohu",
 		'set_date' => "Formát dátumu",
-		'set_shortdate' => "Zkrátený formát dátumu",
+		'set_date2' => "Zkrátený formát dátumu",
+		'set_shortdate' => "Krátky dátum (aktuálny rok)",
 		'set_clock' => "Formát času",
 		'set_12hour' => "12 hodinový",
 		'set_24hour' => "24 hodinový",
 		'set_submit' => "Uložiť zmeny",
 		'set_cancel' => "Zrušit",
-		'set_showdate' => "Zobrazit v zozname dátum vytvorenia úlohy",
+		'set_showdate' => "Zobraziť v zozname dátum vytvorenia úlohy",
 	);
 }
 
