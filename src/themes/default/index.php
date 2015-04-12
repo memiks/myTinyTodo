@@ -9,10 +9,8 @@
 <link rel="stylesheet" type="text/css" href="<?php mttinfo('template_url'); ?>style_rtl.css?=<?php echo Config::get('version'); ?>" media="all" />
 <?php endif; ?>
 <link rel="stylesheet" type="text/css" href="<?php mttinfo('template_url'); ?>print.css?v=<?php echo Config::get('version'); ?>" media="print" />
-</head>
+<link rel="icon" type="image/png" sizes="32x32" href="<?php mttinfo('template_url'); ?>/images/logo32x32.png" rel="shortcut icon apple-touch-icon">
 
-<body>
-<link href="<?php mttinfo('template_url'); ?>/images/logo32x32.png" rel="shortcut icon apple-touch-icon" />
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>js/jquery/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>js/jquery/jquery-ui-1.8.7.custom.min.js"></script>
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>js/jquery/jquery.autocomplete-1.1.js"></script>
@@ -37,6 +35,9 @@ $().ready(function(){
 	}).loadLists(1);
 });
 </script>
+</head>
+
+<body>
 
 <div id="wrapper">
 <div id="container">
@@ -84,7 +85,7 @@ $().ready(function(){
    <input type="text" name="search" value="" maxlength="250" id="search" autocomplete="off" />
    <div class="mtt-searchbox-icon mtt-icon-search"></div>
    <div id="search_close" class="mtt-searchbox-icon mtt-icon-cancelsearch"></div>
-  </div> 
+  </div>
  </td></tr></table>
 </div>
 
@@ -103,7 +104,7 @@ $().ready(function(){
  <td><a href="#" id="newtask_adv" class="mtt-img-button" title="<?php _e('advanced_add');?>"><span></span></a></td>
  </tr></table>
 </div>
- 
+
 <div id="searchbar" style="display:none"><?php _e('searching');?> <span id="searchbarkeyword"></span></div>
 
 <div style="clear:both"></div>
@@ -162,7 +163,7 @@ $().ready(function(){
 </div>
 <div class="form-row" id="alltags" style="display:none;"><?php _e('alltags');?> <span class="tags-list"></span></div>
 <div class="form-row form-bottom-buttons">
- <input type="submit" value="<?php _e('save');?>" /> 
+ <input type="submit" value="<?php _e('save');?>" />
  <input type="button" id="mtt_edit_cancel" class="mtt-back-button" value="<?php _e('cancel');?>" />
 </div>
 </form>
