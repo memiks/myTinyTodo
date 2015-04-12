@@ -56,5 +56,6 @@ $config['dateformatshort'] = 'j M';
 # Show task date in list
 $config['showdate'] = 0;
 
+$config['version'] = trim(file_get_contents (MTTPATH. 'VERSION'));
 
 ?>

@@ -1,7 +1,6 @@
 <?php
 
 if(!defined('MTTPATH')) define('MTTPATH', dirname(__FILE__) .'/');
-$VERSION = trim(file_get_contents (MTTPATH. 'VERSION'));
 
 function htmlarray($a, $exclude=null)
 {
