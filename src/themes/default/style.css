@@ -6,7 +6,7 @@
 /*	default style	*/
 
 html { height:100%; overflow-y:scroll; }
-body { margin:0px; padding:0px;  height:100%; min-height:100%; background-color:#fff; font-family:arial; font-size:10pt; }
+body { margin:0px; padding:0px;  height:100%; min-height:100%; background-color:#fff; font-family:arial; font-size:10pt; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAABCAYAAAAW/mTzAAAAEUlEQVR42mNgAIK5c+dKIWMARSkHxcdk55AAAAAASUVORK5CYII="); }
 #wrapper { margin:0px auto; max-width:950px;  height:100%; }
 #container { height:auto !important;height:100%;min-height:100%;    }
 #mtt_body { padding:8px; padding-bottom:16px; }
@@ -220,11 +220,13 @@ li.task-completed .task-note-block .task-note { text-decoration:line-through; }
 .task-note span a:hover { color:#af0000; }
 
 .task-prio { padding-left:2px; padding-right:2px; margin-left:0px; margin-right:5px; cursor:default; }
-.prio-neg { background-color:#3377ff; color:#ffffff; }
-.prio-pos { background-color:#ff3333; color:#ffffff; }
-.prio-pos-1 { background-color:#ff7700; color:#ffffff; }
-.prio-zero { /*background-color:#dedede;*/ }
-.task-prio.prio-zero { display:none; } 
+.prio-neg   { background-color:#3377ff; color:#ffffff; }
+.prio-neg-1 { background-color:#337777; color:#ffffff; }
+.prio-pos   { background-color:#ff3333; color:#ffffff; }
+.prio-pos-1 { background-color:#dddd33; color:#ffffff; }
+.prio-pos-2 { background-color:#dd9933; color:#ffffff; }
+.prio-pos-3 { background-color:#dd3333; color:#ffffff; }
+.prio-zero  { background-color:#338833; color:#ffffff; }
 
 .form-row { margin-top:8px; }
 .form-row .h { font-weight:bold; color:#333333; }

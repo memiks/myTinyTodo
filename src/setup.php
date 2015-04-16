@@ -53,7 +53,7 @@ else
 	$dbtype = '';
 }
 
-$lastVer = '1.4';
+$lastVer = '1.5';
 echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo '.Config::get('version').' Setup</title></head><body>';
 echo "<big><b>myTinyTodo ".Config::get('version')." Setup</b></big><br><br>";
 
@@ -131,7 +131,7 @@ if(!$ver)
  `compl` TINYINT UNSIGNED NOT NULL default 0,
  `title` VARCHAR(250) NOT NULL,
  `note` TEXT,
- `prio` TINYINT NOT NULL default 0,			/* priority -,0,+ */
+ `prio` INT(3) NOT NULL default 0,			/* priority -,0,+ */
  `ow` INT NOT NULL default 0,				/* order weight */
  `tags` VARCHAR(600) NOT NULL default '',	/* for fast access to task tags */
  `tags_ids` VARCHAR(250) NOT NULL default '', /* no more than 22 tags (x11 chars) */
@@ -161,6 +161,10 @@ if(!$ver)
  KEY(`list_id`)		/* for tagcloud */
 ) CHARSET=utf8 ");
 
+			$db->ex(
+"CREATE TABLE {$db->prefix}v15 (
+ `id` INT NOT NULL
+) CHARSET=utf8 ");
 
 		} catch (Exception $e) {
 			exitMessage("<b>Error:</b> ". htmlarray($e->getMessage()));
@@ -197,7 +201,7 @@ if(!$ver)
  compl TINYINT UNSIGNED NOT NULL default 0,
  title VARCHAR(250) NOT NULL,
  note TEXT,
- prio TINYINT NOT NULL default 0,
+ prio INTEGER NOT NULL default 0,
  ow INTEGER NOT NULL default 0,
  tags VARCHAR(600) NOT NULL default '',
  tags_ids VARCHAR(250) NOT NULL default '',
@@ -225,6 +229,11 @@ if(!$ver)
 			$db->ex("CREATE INDEX tag2task_task_id ON {$db->prefix}tag2task (task_id)");
 			$db->ex("CREATE INDEX tag2task_list_id ON {$db->prefix}tag2task (list_id)");	/* for tagcloud */
 
+            $db->ex(
+"CREATE TABLE {$db->prefix}v15 (
+ id INTEGER NOT NULL
+) ");
+
 		} catch (Exception $e) {
 			exitMessage("<b>Error:</b> ". htmlarray($e->getMessage()));
 		} 
@@ -240,7 +249,7 @@ elseif($ver == $lastVer)
 }
 else
 {
-	if(!in_array($ver, array('1.1','1.2','1.3.0','1.3.1'))) {
+    if(!in_array($ver, array('1.1','1.2','1.3.0','1.3.1','1.4'))) {
 		exitMessage("Can not update. Unsupported database version ($ver).");
 	}
 	if(!isset($_POST['update'])) {
@@ -251,20 +260,26 @@ else
 	}
 
 	# update process
-	if($ver == '1.3.1')
+    if($ver == '1.4') {
+		update_14_15($db, $dbtype);
+	}
+    elseif($ver == '1.3.1')
 	{
 		update_131_14($db, $dbtype);
+        update_14_15($db, $dbtype);
 	}
-	if($ver == '1.3.0')
+    elseif($ver == '1.3.0')
 	{
 		update_130_131($db, $dbtype);
 		update_131_14($db, $dbtype);
+        update_14_15($db, $dbtype);
 	}
-	if($ver == '1.2')
+    elseif($ver == '1.2')
 	{
 		update_12_13($db, $dbtype);
 		update_130_131($db, $dbtype);
 		update_131_14($db, $dbtype);
+        update_14_15($db, $dbtype);
 	}
 	elseif($ver == '1.1')
 	{
@@ -272,6 +287,7 @@ else
 		update_12_13($db, $dbtype);
 		update_130_131($db, $dbtype);
 		update_131_14($db, $dbtype);
+        update_14_15($db, $dbtype);
 	}
 }
 echo "Done<br><br> <b>Attention!</b> Delete this file for security reasons.";
@@ -305,6 +321,8 @@ function get_ver($db, $dbtype)
 		if(!has_field_sqlite($db, $db->prefix.'todolist', 'd_edited')) return $v;
 	}
 	$v = '1.4';
+	if(!$db->table_exists($db->prefix.'v15')) return $v;
+	$v = '1.5';
 	return $v;
 }
 
@@ -781,7 +799,50 @@ function v14_addTaskTags($taskId, $tagIds, $listId)
 		$db->ex("INSERT INTO {$db->prefix}tag2task (task_id,tag_id,list_id) VALUES (?,?,?)", array($taskId,$tagId,$listId));
 	}
 }
-### end of 1.4 #####
 
+### update 1.4 to 1.5 #####
+function update_14_15($db, $dbtype)
+{
+	$db->ex("BEGIN");
+	# change in todolist table: prio is INT(3)/INTEGER
+	if($dbtype=='mysql')
+	{
+		$db->ex("ALTER TABLE {$db->prefix}todolist CHANGE `prio` `prio` INT(3) NOT NULL default 0");
+		$db->ex(
+"CREATE TABLE {$db->prefix}v15 (
+ `id` INT NOT NULL
+) CHARSET=utf8 ");
+	} else {
+		$db->ex(
+			"CREATE TABLE todolist_new (
+			 id INTEGER PRIMARY KEY,
+			 uuid CHAR(36) NOT NULL default '',
+			 list_id INTEGER UNSIGNED NOT NULL default 0,
+			 d_created INTEGER UNSIGNED NOT NULL default 0,
+			 d_completed INTEGER UNSIGNED NOT NULL default 0,
+			 d_edited INTEGER UNSIGNED NOT NULL default 0,
+			 compl TINYINT UNSIGNED NOT NULL default 0,
+			 title VARCHAR(250) NOT NULL,
+			 note TEXT,
+			 prio INTEGER NOT NULL default 0,
+			 ow INTEGER NOT NULL default 0,
+			 tags VARCHAR(600) NOT NULL default '',
+			 tags_ids VARCHAR(250) NOT NULL default '',
+			 duedate DATE default NULL
+			) ");
+		$db->ex("INSERT INTO todolist_new (id,uuid,list_id,d_created,d_completed,d_edited,compl,title,note,prio,ow,tags,tags_ids,duedate)".
+				" SELECT id,uuid,list_id,d_created,d_completed,d_edited,compl,title,note,prio,ow,tags,tags_ids,duedate FROM {$db->prefix}todolist");
+		$db->ex("DROP TABLE {$db->prefix}todolist");
+		$db->ex("ALTER TABLE todolist_new RENAME TO {$db->prefix}todolist");
+		$db->ex("CREATE INDEX todo_list_id ON {$db->prefix}todolist (list_id)"); #1st index of 2
+
+		$db->ex(
+			"CREATE TABLE {$db->prefix}v15 (
+			 id INTEGER NOT NULL
+			) ");
+
+	}
+	$db->ex("COMMIT");
+}
 
 ?>

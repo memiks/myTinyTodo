@@ -266,6 +266,10 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		//Priority popup
+		$('#priopopup .prio-neg-2').click(function(){
+			prioClick(-2,this);
+		});
+
 		$('#priopopup .prio-neg-1').click(function(){
 			prioClick(-1,this);
 		});
@@ -280,6 +284,14 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 		$('#priopopup .prio-pos-2').click(function(){
 			prioClick(2,this);
+		});
+
+		$('#priopopup .prio-pos-3').click(function(){
+			prioClick(3,this);
+		});
+
+        $('#priopopup .prio-pos-4').click(function(){
+			prioClick(4,this);
 		});
 
 		$('#priopopup').mouseleave(function(){
