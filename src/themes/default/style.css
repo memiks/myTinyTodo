@@ -161,6 +161,7 @@ a { color:#0000ff; cursor:pointer; text-decoration:underline; }
 
 .task-left { float:left; }
 .task-toggle { visibility:hidden; margin-top:2px; cursor:pointer; width:15px; height:15px; float:left; background:url(images/icons.gif) -64px -16px no-repeat; }
+div.show-children {float:left; cursor:pointer; visibility: hidden; width: 8px;}
 li.task-has-note .task-toggle { visibility:visible; }
 li.task-expanded .task-toggle { background-position:-80px -16px; }
 .task-middle { margin-left:40px; margin-right:20px; }

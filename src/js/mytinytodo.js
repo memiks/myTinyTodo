@@ -825,8 +825,14 @@ function loadTasks(opts)
         var parents = [];
         $.each($('li.nest-level-1').prev('li.nest-level-0'), function (k, v) {
             var parent = $(v).addClass('has-children');
+            parent.find('div.show-children').css('visibility', 'visible');
             parents.push(parent);
-            parent.nextUntil('li.nest-level-0').wrapAll('<div class="children-container"/>');
+            parent.nextUntil('li.nest-level-0').wrapAll($('<div class="children-container"/>').hide());
+        });
+        $('div.show-children').toggle(function () {
+            $(this).html('-').parent().parent().next().show(500);
+        }, function () {
+            $(this).html('+').parent().parent().next().hide(500);
         });
 	});
 };
