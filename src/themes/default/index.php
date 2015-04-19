@@ -143,13 +143,7 @@ $().ready(function(){
 <div class="form-row form-row-short">
  <span class="h"><?php _e('priority');?></span>
  <select name="prio">
-  <option value="4">+4</option>
-  <option value="3">+3</option>
-  <option value="2">+2</option>
-  <option value="1">+1</option>
-  <option value="0" selected="selected">&plusmn;0</option>
-  <option value="-1">&minus;1</option>
-  <option value="-2">&minus;2</option>
+  <option value="2">+2</option><option value="1">+1</option><option value="0" selected="selected">&plusmn;0</option><option value="-1">&minus;1</option>
  </select>
 </div>
 <div class="form-row form-row-short">
