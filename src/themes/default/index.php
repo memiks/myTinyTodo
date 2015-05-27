@@ -180,10 +180,13 @@ $().ready(function(){
 </div>
 
 <div id="priopopup" style="display:none">
+ <span class="prio-neg prio-neg-2">&minus;2</span>
  <span class="prio-neg prio-neg-1">&minus;1</span>
  <span class="prio-zero">&plusmn;0</span>
  <span class="prio-pos prio-pos-1">+1</span>
  <span class="prio-pos prio-pos-2">+2</span>
+ <span class="prio-pos prio-pos-3">+3</span>
+ <span class="prio-pos prio-pos-4">+4</span>
 </div>
 
 <div id="taskviewcontainer" class="mtt-menu-container" style="display:none">

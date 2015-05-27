@@ -47,7 +47,7 @@ if (Config::get('password') == '' || (isset($_COOKIE['MTTAUTH']) && $_COOKIE['MT
 <div class="login-form">
     <h2><?php mttinfo('title'); ?></h2>
 
-    <form accept-charset="UTF-8" id="loginForm" method='POST' action='<?php echo $_SERVER['REQUEST_URI']; ?>'>
+    <form accept-charset="UTF-8" id="loginForm" method='POST' action='<?php echo @$_SERVER['REQUEST_URI']; ?>'>
         <input type="text" id="user" name="user" placeholder="<?php _e('set_user'); ?>"/>
         <input type='password' id='password' name='pasword' placeholder="<?php _e('password'); ?>"/>
          <span>
