@@ -266,6 +266,10 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		//Priority popup
+		$('#priopopup .prio-neg-2').click(function(){
+			prioClick(-2,this);
+		});
+
 		$('#priopopup .prio-neg-1').click(function(){
 			prioClick(-1,this);
 		});
@@ -280,6 +284,14 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 		$('#priopopup .prio-pos-2').click(function(){
 			prioClick(2,this);
+		});
+
+		$('#priopopup .prio-pos-3').click(function(){
+			prioClick(3,this);
+		});
+
+        $('#priopopup .prio-pos-4').click(function(){
+			prioClick(4,this);
 		});
 
 		$('#priopopup').mouseleave(function(){
@@ -809,6 +821,19 @@ function loadTasks(opts)
 		}
 		refreshTaskCnt();
 		$('#tasklist').html(tasks);
+
+        var parents = [];
+        $.each($('li.nest-level-1').prev('li.nest-level-0'), function (k, v) {
+            var parent = $(v).addClass('has-children');
+            parent.find('div.show-children').css('visibility', 'visible');
+            parents.push(parent);
+            parent.nextUntil('li.nest-level-0').wrapAll($('<div class="children-container"/>').hide());
+        });
+        $('div.show-children').toggle(function () {
+            $(this).html('-').parent().parent().next().show(500);
+        }, function () {
+            $(this).html('+').parent().parent().next().hide(500);
+        });
 	});
 };
 
@@ -819,9 +844,12 @@ function prepareTaskStr(item, noteExp)
 	var id = item.id;
 	var prio = item.prio;
 	return '<li id="taskrow_'+id+'" class="' + (item.compl?'task-completed ':'') + item.dueClass + (item.note!=''?' task-has-note':'') +
-				((curList.showNotes && item.note != '') || noteExp ? ' task-expanded' : '') + prepareTagsClass(item.tags_ids) + '">' +
+				((curList.showNotes && item.note != '') || noteExp ? ' task-expanded' : '') + prepareTagsClass(item.tags_ids) +
+        ' nest-level-' + item.nest_level + '">' +
 		'<div class="task-actions"><a href="#" class="taskactionbtn"></a></div>'+"\n"+
-		'<div class="task-left"><div class="task-toggle"></div>'+
+		'<div class="task-left">'+
+        '<div class="show-children">+</div>'+
+        '<div class="task-toggle"></div>'+
 		'<input type="checkbox" '+(flag.readOnly?'disabled="disabled"':'')+(item.compl?'checked="checked"':'')+'/></div>'+"\n"+
 		'<div class="task-middle"><div class="task-through-right">'+prepareDuedate(item)+
 		'<span class="task-date-completed"><span title="'+item.dateInlineTitle+'">'+item.dateInline+'</span>&#8212;'+

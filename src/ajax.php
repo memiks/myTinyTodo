@@ -164,8 +164,8 @@ elseif(isset($_GET['editTask']))
 	$title = trim(_post('title'));
 	$note = str_replace("\r\n", "\n", trim(_post('note')));
 	$prio = (int)_post('prio');
-	if($prio < -1) $prio = -1;
-	elseif($prio > 2) $prio = 2;
+	if($prio < -2) $prio = -2;
+	elseif($prio > 4) $prio = 4;
 	$duedate = parse_duedate(trim(_post('duedate')));
 	$t = array();
 	$t['total'] = 0;
@@ -261,8 +261,8 @@ elseif(isset($_GET['setPrio']))
 	check_write_access();
 	$id = (int)$_GET['setPrio'];
 	$prio = (int)_get('prio');
-	if($prio < -1) $prio = -1;
-	elseif($prio > 2) $prio = 2;
+	if($prio < -2) $prio = -2;
+	elseif($prio > 4) $prio = 4;
 	$db->ex("UPDATE {$db->prefix}todolist SET prio=$prio,d_edited=? WHERE id=$id", array(time()) );
 	$t = array();
 	$t['total'] = 1;

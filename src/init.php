@@ -11,7 +11,7 @@ require_once(MTTPATH. 'functions.php');
 require_once(MTTPATH. 'common.php');
 require_once(MTTPATH. 'db/config.php');
 
-ini_set('display_errors', 'On');
+ini_set('display_errors', 0);
 
 if(!isset($config)) global $config;
 Config::loadConfig($config);
@@ -52,7 +52,7 @@ if($needAuth && !isset($dontStartSession) && !defined ("__API__"))
 {
 	ini_set('session.use_cookies', true);
 	ini_set('session.use_only_cookies', true);
-	session_set_cookie_params(1209600, url_dir(Config::get('url')=='' ? $_SERVER['REQUEST_URI'] : Config::get('url'))); # 14 days session cookie lifetime
+	session_set_cookie_params(1209600, url_dir(Config::get('url')=='' ? @$_SERVER['REQUEST_URI'] : Config::get('url'))); # 14 days session cookie lifetime
 	session_name('mtt-session');
 	session_start();
 }
